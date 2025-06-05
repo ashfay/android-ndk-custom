@@ -127,8 +127,8 @@ jobs:
           TOOLCHAIN=${PWD}/zig-as-llvm
           export CC=${TOOLCHAIN}/bin/cc
           export CXX=${TOOLCHAIN}/bin/c++
-          export CFLAGS="-Os -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -Wno-unused-command-line-argument"
-          export CXXFLAGS="-Os -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -Wno-unused-command-line-argument"
+          export CFLAGS="-O3 -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -Wno-unused-command-line-argument"
+          export CXXFLAGS="-O3 -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -Wno-unused-command-line-argument"
           export LD=${TOOLCHAIN}/bin/ld
           export OBJCOPY=${TOOLCHAIN}/bin/objcopy
           export AR=${TOOLCHAIN}/bin/ar
@@ -209,8 +209,8 @@ jobs:
           cmake -S "$ROOTDIR/llvm" -B "${TARGET_BUILD_DIR}" -G Ninja \
             -DCMAKE_INSTALL_PREFIX="${ROOTDIR}/llvm-${{matrix.target}}" \
             -DCMAKE_PREFIX_PATH="${TARGET_INSTALL_DIR}" \
-            -DLLVM_TARGETS_TO_BUILD="X86;AArch64;ARM;RISCV" \
-            -DCMAKE_BUILD_TYPE=MinSizeRel \
+            -DLLVM_TARGETS_TO_BUILD="AArch64;ARM;BPF;RISCV;WebAssembly;X86" \
+            -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_CROSSCOMPILING=True \
             -DCMAKE_SYSTEM_NAME=Linux \
             -DLLVM_DEFAULT_TARGET_TRIPLE=${{matrix.target}} \
@@ -221,9 +221,9 @@ jobs:
             -DCMAKE_OBJCOPY="${TOOLCHAIN}/bin/objcopy" \
             -DCMAKE_AR="${TOOLCHAIN}/bin/ar" \
             -DCMAKE_STRIP="${TOOLCHAIN}/bin/strip" \
-            -DCMAKE_C_FLAGS="-Os -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -static-pie -Wno-unused-command-line-argument" \
-            -DCMAKE_CXX_FLAGS="-Os -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -static-pie -Wno-unused-command-line-argument" \
-            -DCMAKE_EXE_LINKER_FLAGS="-Wl,-z,relro,-z,now -static-pie" \
+            -DCMAKE_C_FLAGS="-O3 -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -static-pie -Wno-unused-command-line-argument" \
+            -DCMAKE_CXX_FLAGS="-O3 -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -static-pie -Wno-unused-command-line-argument" \
+            -DCMAKE_EXE_LINKER_FLAGS="-Wl,-z,relro,-z,now -s -static-pie" \
             -DLLVM_ENABLE_PROJECTS="${{inputs.projects}}" \
             -DLLVM_ENABLE_ZLIB=FORCE_ON \
             -DLLVM_ENABLE_ZSTD=FORCE_ON \
