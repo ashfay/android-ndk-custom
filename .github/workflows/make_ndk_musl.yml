@@ -97,9 +97,9 @@ jobs:
           OBJCOPY=${TOOLCHAIN}/bin/objcopy \
           AR=${TOOLCHAIN}/bin/ar \
           STRIP=${TOOLCHAIN}/bin/strip \
-          CFLAGS="-Os -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-unused-command-line-argument" \
-          CXXFLAGS="-Os -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-unused-command-line-argument" \
-          LDFLAGS="-Wl,-z,relro,-z,now -static-pie"
+          CFLAGS="-O2 -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-unused-command-line-argument" \
+          CXXFLAGS="-O2 -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-unused-command-line-argument" \
+          LDFLAGS="-Wl,-z,relro,-z,now -s -static-pie"
           make -j"$(nproc --all)" install
 
           cd $HOME
@@ -122,9 +122,9 @@ jobs:
           OBJCOPY=${TOOLCHAIN}/bin/objcopy \
           AR=${TOOLCHAIN}/bin/ar \
           STRIP=${TOOLCHAIN}/bin/strip \
-          CFLAGS="-Os -fstack-clash-protection -fstack-protector-strong -static-pie -fwrapv -Wno-error=date-time -Wno-unused-command-line-argument" \
-          CXXFLAGS="-Os -fstack-clash-protection -fstack-protector-strong -static-pie -fwrapv -Wno-error=date-time -Wno-unused-command-line-argument" \
-          LDFLAGS="-Wl,-z,relro,-z,now -static-pie"
+          CFLAGS="-O2 -fstack-clash-protection -fstack-protector-strong -static-pie -fwrapv -Wno-error=date-time -Wno-unused-command-line-argument" \
+          CXXFLAGS="-O2 -fstack-clash-protection -fstack-protector-strong -static-pie -fwrapv -Wno-error=date-time -Wno-unused-command-line-argument" \
+          LDFLAGS="-Wl,-z,relro,-z,now -s -static-pie"
           make -j"$(nproc --all)" install
 
           # SPIRV-Tools and shaderc
@@ -153,10 +153,10 @@ jobs:
           rm -rf .git
           cmake -S "$HOME/shaderc" -B "$HOME/shaderc/build" -G Ninja \
             -DCMAKE_INSTALL_PREFIX="$HOME/shaderc/install" \
-            -DCMAKE_BUILD_TYPE=MinSizeRel \
-            -DCMAKE_C_FLAGS="$([[ "${{ matrix.target }}" == "hexagon-linux-musl" ]] && echo '-Wno-bitfield-width -Wno-error=bitfield-width') -Os -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-unused-command-line-argument" \
-            -DCMAKE_CXX_FLAGS="$([[ "${{ matrix.target }}" == "hexagon-linux-musl" ]] && echo '-Wno-bitfield-width -Wno-error=bitfield-width') -Os -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-unused-command-line-argument" \
-            -DCMAKE_EXE_LINKER_FLAGS="-Wl,-z,relro,-z,now -static-pie" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_FLAGS="$([[ "${{ matrix.target }}" == "hexagon-linux-musl" ]] && echo '-Wno-bitfield-width -Wno-error=bitfield-width') -O2 -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-unused-command-line-argument" \
+            -DCMAKE_CXX_FLAGS="$([[ "${{ matrix.target }}" == "hexagon-linux-musl" ]] && echo '-Wno-bitfield-width -Wno-error=bitfield-width') -O2 -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-unused-command-line-argument" \
+            -DCMAKE_EXE_LINKER_FLAGS="-Wl,-z,relro,-z,now -s -static-pie" \
             -DCMAKE_CROSSCOMPILING=True \
             -DCMAKE_SYSTEM_NAME=Linux \
             -DCMAKE_C_COMPILER="${TOOLCHAIN}/bin/cc" \
@@ -200,8 +200,8 @@ jobs:
           OBJCOPY=${TOOLCHAIN}/bin/objcopy \
           AR=${TOOLCHAIN}/bin/ar \
           STRIP=${TOOLCHAIN}/bin/strip \
-          CFLAGS="-Os -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-error=date-time -Wno-unused-command-line-argument" \
-          CXXFLAGS="-Os -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-error=date-time -Wno-unused-command-line-argument" \
+          CFLAGS="-O3 -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-error=date-time -Wno-unused-command-line-argument" \
+          CXXFLAGS="-O3 -fstack-clash-protection -fstack-protector-strong -static-pie -Wno-error=date-time -Wno-unused-command-line-argument" \
           LDFLAGS="-Wl,-z,relro,-z,now -s -static-pie" \
           ac_cv_func_dlopen=no ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no
           make -j"$(nproc --all)" build_all || echo "WARNING: issue in building python for ${{ matrix.target }}"
