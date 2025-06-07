@@ -221,8 +221,8 @@ jobs:
             -DCMAKE_OBJCOPY="${TOOLCHAIN}/bin/objcopy" \
             -DCMAKE_AR="${TOOLCHAIN}/bin/ar" \
             -DCMAKE_STRIP="${TOOLCHAIN}/bin/strip" \
-            -DCMAKE_C_FLAGS="-O2 -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -static-pie -Wno-unused-command-line-argument" \
-            -DCMAKE_CXX_FLAGS="-O2 -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -static-pie -Wno-unused-command-line-argument" \
+            -DCMAKE_C_FLAGS="-O2 -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -g0 -static-pie -Wno-unused-command-line-argument" \
+            -DCMAKE_CXX_FLAGS="-O2 -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -g0 -static-pie -Wno-unused-command-line-argument" \
             -DCMAKE_EXE_LINKER_FLAGS="-Wl,-z,relro,-z,now -s -static-pie" \
             -DLLVM_ENABLE_PROJECTS="${{inputs.projects}}" \
             -DLLVM_ENABLE_ZLIB=FORCE_ON \
